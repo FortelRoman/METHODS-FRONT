@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import {ConfigProvider, ThemeConfig} from "antd";
 import ruRu from 'antd/locale/ru_RU';
+import {BrowserRouter} from "react-router-dom";
+import Routing from "./routing/routing";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -95,7 +96,9 @@ const theme: ThemeConfig = {
 root.render(
   // <React.StrictMode>
     <ConfigProvider theme={theme} locale={ruRu}>
-        <App />
+        <BrowserRouter>
+            <Routing />
+        </BrowserRouter>
     </ConfigProvider>
   // </React.StrictMode>
 );

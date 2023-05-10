@@ -1,16 +1,16 @@
-import {Button, Modal, notification, Typography} from "antd";
+import {Button, notification, Typography} from "antd";
 import {RadioComponent} from "../../conponents/radio";
 import {useForm} from "react-hook-form";
-import React, {FC, useState} from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import React, {useState} from "react";
 import {data} from "./data";
+import {CaptchaModal} from "../../conponents/captcha-modal";
 const {Title} = Typography;
 
 type TState = Record<string, string>
 
 const defaultValues = {}
 
-export const CaptchaVoites = () => {
+export const CaptchaVotes = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,7 +20,7 @@ export const CaptchaVoites = () => {
         defaultValues,
     });
 
-    const {control, handleSubmit, getValues} = methods;
+    const {control, handleSubmit, getValues, formState: {isValid, isSubmitted}} = methods;
 
     const onOk = () => {
         notification.open({
@@ -39,8 +39,8 @@ export const CaptchaVoites = () => {
     };
 
     return (
-        <>
-            <Title level={1}>Captcha voites</Title>
+        <div className={'page'}>
+            <Title level={1}>Опрос</Title>
             <form onSubmit={handleSubmit(onSubmit)}>
                 {
                     data.map(({label, name, options}, index) => (
@@ -52,31 +52,9 @@ export const CaptchaVoites = () => {
                         />
                     ))
                 }
-                <Button htmlType={'submit'} type={'primary'}>Отправить</Button>
+                <Button htmlType={'submit'} type={'primary'} disabled={!isSubmitted ? false : !isValid}>Отправить</Button>
             </form>
             <CaptchaModal isModalOpen={isModalOpen} handleCancel={handleCancel} onOk={onOk}/>
-        </>
-    )
-}
-
-type TProps = {
-    isModalOpen: boolean,
-    handleCancel: () => void,
-    onOk: () => void,
-}
-
-const CaptchaModal: FC<TProps> = ({isModalOpen, handleCancel, onOk}) => {
-
-    const onChange = (value: any) => {
-        if (value) {
-            onOk();
-            handleCancel()
-        }
-    }
-
-    return (
-        <Modal title="Подтвердите, что вы не робот" open={isModalOpen} centered onCancel={handleCancel} footer={null}>
-            <ReCAPTCHA sitekey={'6LfvNc0lAAAAAOQzeDnxBBCkWKtS5vGVLJLo58np'} onChange={onChange}/>
-        </Modal>
+        </div>
     )
 }

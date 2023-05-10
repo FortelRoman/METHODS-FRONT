@@ -8,7 +8,7 @@ type TState = Record<string, string>
 
 const defaultValues = {}
 
-export const SimpleVoites = () => {
+export const SimpleVotes = () => {
 
 
     const methods = useForm<TState>({
@@ -16,7 +16,7 @@ export const SimpleVoites = () => {
         defaultValues,
     });
 
-    const {control, handleSubmit} = methods;
+    const {control, handleSubmit, formState: {isValid, isSubmitted}} = methods;
 
     const onSubmit = (values: TState) => {
         notification.open({
@@ -29,8 +29,8 @@ export const SimpleVoites = () => {
 
 
     return (
-        <>
-            <Title level={1}>Simple voites</Title>
+        <div className={'page'}>
+            <Title level={1}>Опрос</Title>
             <form onSubmit={handleSubmit(onSubmit)}>
                 {
                     data.map(({label, name, options}, index) => (
@@ -42,9 +42,9 @@ export const SimpleVoites = () => {
                         />
                     ))
                 }
-                <Button htmlType={'submit'} type={'primary'}>Отправить</Button>
+                <Button htmlType={'submit'} type={'primary'} disabled={!isSubmitted ? false : !isValid}>Отправить</Button>
             </form>
 
-        </>
+        </div>
     )
 }

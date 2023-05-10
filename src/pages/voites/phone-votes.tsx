@@ -10,7 +10,7 @@ type TState = Record<string, string>
 
 const defaultValues = {}
 
-export const EmailVoites = () => {
+export const PhoneVotes = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,7 +20,7 @@ export const EmailVoites = () => {
         defaultValues,
     });
 
-    const {control, handleSubmit, getValues} = methods;
+    const {control, handleSubmit, getValues, formState: {isValid, isSubmitted}} = methods;
 
     const onOk = () => {
         notification.open({
@@ -39,8 +39,8 @@ export const EmailVoites = () => {
     };
 
     return (
-        <>
-            <Title level={1}>Email voites</Title>
+        <div className={'page'}>
+            <Title level={1}>Опрос</Title>
             <form onSubmit={handleSubmit(onSubmit)}>
                 {
                     data.map(({label, name, options}, index) => (
@@ -52,10 +52,10 @@ export const EmailVoites = () => {
                         />
                     ))
                 }
-                <Button htmlType={'submit'} type={'primary'}>Отправить</Button>
+                <Button htmlType={'submit'} type={'primary'} disabled={!isSubmitted ? false : !isValid}>Отправить</Button>
             </form>
-            {isModalOpen && <EmailModal isModalOpen={isModalOpen} handleCancel={handleCancel} onOk={onOk}/>}
-        </>
+            {isModalOpen && <PhoneModal isModalOpen={isModalOpen} handleCancel={handleCancel} onOk={onOk}/>}
+        </div>
     )
 }
 
@@ -65,21 +65,21 @@ type TProps = {
     onOk: () => void,
 }
 
-type TEmail = {
-    email: string,
+type TPhone = {
+    phone: string,
 }
 
 type TCode = {
     code: string,
 }
 
-const EmailModal: FC<TProps> = ({isModalOpen, handleCancel, onOk}) => {
+const PhoneModal: FC<TProps> = ({isModalOpen, handleCancel, onOk}) => {
 
     const [isSend,setIsSend] = useState(false)
 
-    const emailMethods = useForm<TEmail>({
+    const phoneMethods = useForm<TPhone>({
         mode: 'onTouched',
-        defaultValues: {email: ''},
+        defaultValues: {phone: ''},
     });
     const codeMethods = useForm<TCode>({
         mode: 'onTouched',
@@ -91,7 +91,7 @@ const EmailModal: FC<TProps> = ({isModalOpen, handleCancel, onOk}) => {
     }
 
     const onCode = () => {
-        if (codeMethods.getValues('code') === emailMethods.getValues('email').slice(0, 4)) {
+        if (codeMethods.getValues('code') === phoneMethods.getValues('phone').slice(0, 4)) {
             onOk();
             handleCancel();
         } else {
@@ -105,17 +105,17 @@ const EmailModal: FC<TProps> = ({isModalOpen, handleCancel, onOk}) => {
                 !isSend ? (
                     <>
                         <CustomInput
-                            name={'email'}
+                            name={'phone'}
                             main={{
-                                label: 'Введите email',
-                                placeholder: 'Введите email-адрес',
+                                label: 'Введите номер телефона',
+                                placeholder: 'Введите номер',
                             }}
-                            control={emailMethods.control}
+                            control={phoneMethods.control}
                             rules={{
                                 required: { message: 'Поле обязательное', value: true },
                             }}
                         />
-                        <Button type='primary' onClick={emailMethods.handleSubmit(onEmail)} disabled={!emailMethods.formState.isSubmitted ? false : !emailMethods.formState.isValid}>Отправить код подтверждения</Button>
+                        <Button type='primary' onClick={phoneMethods.handleSubmit(onEmail)} disabled={!phoneMethods.formState.isSubmitted ? false : !phoneMethods.formState.isValid}>Отправить код подтверждения</Button>
                     </>
                 ) : (
                     <div>
