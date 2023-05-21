@@ -85,17 +85,17 @@ h1 {
   color: #FF2E56;
 }
 
-.parse-content span.ant-typography {
+.page span.ant-typography {
   font-size: 16px;
   display: block;
   margin-bottom: 10px
 }
 
-.parse-content .ant-statistic .ant-statistic-title {
+.page .ant-statistic .ant-statistic-title {
   font-size: 18px;
 }
 
-.parse-content__stat {
+.page__info {
   display: flex;
   column-gap: 100px;
   row-gap: 20px;
@@ -103,7 +103,7 @@ h1 {
   margin-bottom: 30px;
 }
 
-.parse-content ul {
+.page ul {
   font-size: 16px;
   color: rgba(0, 0, 0, 0.88);
 }

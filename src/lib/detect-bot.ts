@@ -3,8 +3,14 @@ const checkWebdriver = () => {
 }
 
 const checkWindowCdcKeys = () => {
-    // @ts-ignore
-    return window.cdc_adoQpoasnfa76pfcZLmcfl_Array || window.cdc_adoQpoasnfa76pfcZLmcfl_Promise || window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
+    for (const windowKey in window) {
+        // @ts-ignore
+        if (windowKey.match(/[a-z]dc_/)) {
+            // @ts-ignore
+            return true;
+        }
+    }
+    return false
 }
 
 const checkDocumentCdcKeys = () => {
